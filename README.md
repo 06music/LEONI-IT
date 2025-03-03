@@ -65,4 +65,3 @@ Employee	employee@example.com	employee	password
 ✅ Role-Based Access Control (RBAC) (Super Admin, Manager, Superior, Employee)
 ✅ Separate Dashboards for Each Role
 ✅ Authentication using Laravel Breeze & Inertia.js
-✅ Manage Equipment Assignments & Tracking
