@@ -3,9 +3,9 @@
         <section class="bg-gray-50 dark:bg-gray-900 p-5">
             <div class="row">
                 <!-- Header Section -->
-                <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 mb-4">
-                    <h2 class="text-lg font-semibold">Sites Management</h2>
-                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                <div class="flex flex-col md:flex-row items-center justify-between mb-5 space-y-3 md:space-y-0">
+                    <h2 class="text-xl font-semibold">Sites Management</h2>
+                    <div class="flex items-center space-x-3">
                         <el-input
                             v-model="searchQuery"
                             placeholder="Search for a site..."
@@ -13,41 +13,43 @@
                             clearable
                         >
                             <template #prefix>
-                                <el-icon><search /></el-icon>
+                                <el-icon><Search /></el-icon>
                             </template>
                         </el-input>
                         <el-button type="primary" @click="openModal(null)">
-                            <el-icon><plus /></el-icon> Add Site
+                            <el-icon><Plus /></el-icon> Add Site
                         </el-button>
                     </div>
                 </div>
 
                 <!-- Table Section -->
-                <el-table :data="filteredSites" stripe style="width: 100%">
-                    <el-table-column prop="name" label="Name" />
-                    <el-table-column prop="location" label="Location" />
-                    <el-table-column label="Actions" width="150">
+                <el-table :data="filteredSites" stripe highlight-current-row border style="width: 100%">
+                    <el-table-column prop="name" label="Name" sortable />
+                    <el-table-column prop="location" label="Location" sortable />
+                    <el-table-column label="Actions" width="160">
                         <template #default="{ row }">
-                            <el-button-group>
+                            <el-tooltip content="Edit" placement="top">
                                 <el-button size="small" @click="openModal(row)">
-                                    <el-icon><edit /></el-icon>
+                                    <el-icon><Edit /></el-icon>
                                 </el-button>
+                            </el-tooltip>
+                            <el-tooltip content="Delete" placement="top">
                                 <el-button size="small" type="danger" @click="confirmDelete(row.id)">
-                                    <el-icon><delete /></el-icon>
+                                    <el-icon><Delete /></el-icon>
                                 </el-button>
-                            </el-button-group>
+                            </el-tooltip>
                         </template>
                     </el-table-column>
                 </el-table>
 
                 <!-- Modal Popup for Add/Edit -->
-                <el-dialog v-model="showModal" :title="modalTitle">
-                    <el-form :model="form">
+                <el-dialog v-model="showModal" :title="modalTitle" width="450px" center>
+                    <el-form :model="form" label-width="100px">
                         <el-form-item label="Name">
-                            <el-input v-model="form.name" />
+                            <el-input v-model="form.name" clearable placeholder="Enter site name" />
                         </el-form-item>
                         <el-form-item label="Location">
-                            <el-input v-model="form.location" />
+                            <el-input v-model="form.location" clearable placeholder="Enter location" />
                         </el-form-item>
                     </el-form>
                     <template #footer>
@@ -134,3 +136,10 @@ const confirmDelete = (id) => {
         .catch(() => {});
 };
 </script>
+
+<style>
+/* Optional Styling for Better UX */
+.el-dialog {
+    border-radius: 12px !important;
+}
+</style>
