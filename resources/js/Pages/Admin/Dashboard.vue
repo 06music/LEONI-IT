@@ -1,27 +1,36 @@
-<script setup>
-import { useForm } from "@inertiajs/vue3";
-
-const form = useForm({});
-
-const logout = () => {
-  form.post(route("logout"));
-};
-</script>
-
 <template>
-  <div class="p-6">
-    <h1 class="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
-
-    <p class="mt-4">Total Users: 100</p>
-    <p>Total Sites: 10</p>
-    <p>Total Equipments: 500</p>
-
-    <!-- Logout Button -->
-    <button
-      @click="logout"
-      class="mt-6 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg"
-    >
-      Logout
-    </button>
-  </div>
+    <AdminLayout>
+        <div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <div class="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 h-32 md:h-64"></div>
+                <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-32 md:h-64"></div>
+                <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-32 md:h-64"></div>
+                <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-32 md:h-64"></div>
+            </div>
+            <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-96 mb-4"></div>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
+                <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
+                <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
+                <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
+            </div>
+            <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-96 mb-4"></div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
+                <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
+                <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
+                <div class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"></div>
+            </div>
+        </div>
+    </AdminLayout>
 </template>
+
+<script setup>
+import { onMounted } from 'vue'
+import { initFlowbite } from 'flowbite'
+import AdminLayout from './Components/AdminLayout.vue'
+// initialize components based on data attribute selectors
+onMounted(() => {
+    initFlowbite();
+})
+</script>
