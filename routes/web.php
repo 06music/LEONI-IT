@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\SiteController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,8 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->middleware(['role:super_admin'])->group(function () {
     Route::get('/dashboard', [SuperAdminDashboardController::class, 'index'])->name('dashboard.super_admin');
     Route::resource('sites', SiteController::class);
+    Route::resource('users', UserController::class);
+
 
 });
 
