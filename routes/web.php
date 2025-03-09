@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ComputerController;
 use App\Http\Controllers\Admin\SiteController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
@@ -10,6 +11,10 @@ use App\Http\Controllers\ManagerDashboardController;
 use App\Http\Controllers\SuperiorDashboardController;
 use App\Http\Controllers\EmployeeDashboardController;
 use App\Http\Controllers\SuperAdminDashboardController;
+use App\Http\Controllers\Admin\EquipmentTypeController;
+use App\Http\Controllers\Admin\EquipmentModelController;
+use App\Http\Controllers\Admin\EquipmentReasonController;
+use App\Http\Controllers\Manager\EquipmentAssignmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +50,12 @@ Route::prefix('admin')->middleware(['role:super_admin'])->group(function () {
     Route::get('/dashboard', [SuperAdminDashboardController::class, 'index'])->name('dashboard.super_admin');
     Route::resource('sites', SiteController::class);
     Route::resource('users', UserController::class);
+    Route::get('/computers', [ComputerController::class, 'index'])->name('computers.index');
+    Route::resource('equipment-types', EquipmentTypeController::class);
+    Route::resource('equipment-models', EquipmentModelController::class);
+    Route::resource('equipment-reasons', EquipmentReasonController::class);
+    Route::post('/computers/upload-excel', [ComputerController::class, 'uploadExcel']);
+
 
 
 });
@@ -52,7 +63,13 @@ Route::prefix('admin')->middleware(['role:super_admin'])->group(function () {
 // Manager Routes
 Route::prefix('manager')->middleware(['role:manager'])->group(function () {
     Route::get('/dashboard', [ManagerDashboardController::class, 'index'])->name('dashboard.manager');
-  //  Route::post('/assign-equipment', [EquipmentController::class, 'assign'])->name('equipment.assign');
+    Route::get('/users', [ManagerUserController::class, 'index'])->name('manager.users');
+    Route::get('/equipments', [ManagerEquipmentController::class, 'index'])->name('manager.equipments');
+    Route::get('/computers', [ManagerComputerController::class, 'index'])->name('manager.computers');
+    Route::get('/assign-equipment', [EquipmentAssignmentController::class, 'Index'])->name('manager.assign_equipment');
+    Route::post('/assign-equipment', [EquipmentAssignmentController::class, 'store']);
+    Route::get('/return-equipment', [EquipmentAssignmentController::class, 'returnForm'])->name('manager.return_equipment');
+    Route::post('/return-equipment', [EquipmentAssignmentController::class, 'processReturn']);
 });
 
 // Employee Routes

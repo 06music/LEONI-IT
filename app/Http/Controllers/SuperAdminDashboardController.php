@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Computer;
+use App\Models\Site;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,9 +13,10 @@ class SuperAdminDashboardController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Dashboard', [
-            'total_users' => 100, // Example static value
-            'total_sites' => 10,  // Example static value
-            'total_equipments' => 500, // Example static value
+            'totalUsers' => User::count(),
+            'totalSites' => Site::count(),
+            'totalEquipments' => Computer::count(),
+            'recentComputers' => Computer::latest()->take(5)->get(),
         ]);
     }
 }

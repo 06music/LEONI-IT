@@ -4,11 +4,11 @@
             <div class="row">
                 <!-- Header Section -->
                 <div class="flex flex-col md:flex-row items-center justify-between mb-5 space-y-3 md:space-y-0">
-                    <h2 class="text-xl font-semibold">Sites Management</h2>
+                    <h2 class="text-xl font-semibold">Equipment Models</h2>
                     <div class="flex items-center space-x-3">
                         <el-input
                             v-model="searchQuery"
-                            placeholder="Search for a site..."
+                            placeholder="Search for a model..."
                             class="w-64"
                             clearable
                         >
@@ -17,15 +17,15 @@
                             </template>
                         </el-input>
                         <el-button type="primary" @click="openModal(null)">
-                            <el-icon><Plus /></el-icon> Add Site
+                            <el-icon><Plus /></el-icon> Add Model
                         </el-button>
                     </div>
                 </div>
 
                 <!-- Table Section -->
-                <el-table :data="filteredSites" stripe highlight-current-row border style="width: 100%">
-                    <el-table-column prop="name" label="Name" sortable />
-                    <el-table-column prop="location" label="Location" sortable />
+                <el-table :data="filteredModels" stripe highlight-current-row border style="width: 100%">
+                    <el-table-column prop="name" label="Model Name" sortable />
+                    <el-table-column prop="description" label="Description" sortable />
                     <el-table-column label="Actions" width="160">
                         <template #default="{ row }">
                             <el-tooltip content="Edit" placement="top">
@@ -45,11 +45,11 @@
                 <!-- Modal Popup for Add/Edit -->
                 <el-dialog v-model="showModal" :title="modalTitle" width="450px" center>
                     <el-form :model="form" label-width="100px">
-                        <el-form-item label="Name">
-                            <el-input v-model="form.name" clearable placeholder="Enter site name" />
+                        <el-form-item label="Model Name">
+                            <el-input v-model="form.name" clearable placeholder="Enter model name" />
                         </el-form-item>
-                        <el-form-item label="Location">
-                            <el-input v-model="form.location" clearable placeholder="Enter location" />
+                        <el-form-item label="Description">
+                            <el-input v-model="form.description" clearable placeholder="Enter description" />
                         </el-form-item>
                     </el-form>
                     <template #footer>
@@ -69,78 +69,68 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import AdminLayout from "../Components/AdminLayout.vue";
 import { Search, Plus, Edit, Delete } from "@element-plus/icons-vue";
 
-const props = defineProps({ sites: Array });
+const props = defineProps({ models: Array });
 
 const showModal = ref(false);
 const searchQuery = ref("");
-const editingSiteId = ref(null);
+const editingModelId = ref(null);
 
 const form = useForm({
     name: "",
-    location: "",
+    description: "",
 });
 
 // Computed property for real-time filtering
-const filteredSites = computed(() =>
-    props.sites.filter(
-        (site) =>
-            site.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-            site.location.toLowerCase().includes(searchQuery.value.toLowerCase())
+const filteredModels = computed(() =>
+    props.models.filter((model) =>
+        model.name.toLowerCase().includes(searchQuery.value.toLowerCase())
     )
 );
 
-const modalTitle = computed(() => (editingSiteId.value ? "Edit Site" : "Add Site"));
-const modalButton = computed(() => (editingSiteId.value ? "Update" : "Save"));
+const modalTitle = computed(() => (editingModelId.value ? "Edit Model" : "Add Model"));
+const modalButton = computed(() => (editingModelId.value ? "Update" : "Save"));
 
-const openModal = (site) => {
-    if (site) {
-        editingSiteId.value = site.id;
-        form.name = site.name;
-        form.location = site.location;
+const openModal = (model) => {
+    if (model) {
+        editingModelId.value = model.id;
+        form.name = model.name;
+        form.description = model.description;
     } else {
-        editingSiteId.value = null;
+        editingModelId.value = null;
         form.reset();
     }
     showModal.value = true;
 };
 
 const submit = () => {
-    if (editingSiteId.value) {
-        form.put(route("sites.update", editingSiteId.value), {
+    if (editingModelId.value) {
+        form.put(route("equipment-models.update", editingModelId.value), {
             onSuccess: () => {
                 showModal.value = false;
-                ElMessage({ message: "Site updated successfully", type: "success" });
+                ElMessage({ message: "Model updated successfully", type: "success" });
             },
         });
     } else {
-        form.post(route("sites.store"), {
+        form.post(route("equipment-models.store"), {
             onSuccess: () => {
                 showModal.value = false;
-                ElMessage({ message: "Site added successfully", type: "success" });
+                ElMessage({ message: "Model added successfully", type: "success" });
             },
         });
     }
 };
 
 const confirmDelete = (id) => {
-    ElMessageBox.confirm("Are you sure you want to delete this site?", "Warning", {
+    ElMessageBox.confirm("Are you sure you want to delete this model?", "Warning", {
         confirmButtonText: "Yes, Delete",
         cancelButtonText: "Cancel",
         type: "warning",
     })
         .then(() => {
-            form.delete(route("sites.destroy", id), {
-                onSuccess: () => ElMessage({ message: "Site deleted successfully", type: "success" }),
+            form.delete(route("equipment-models.destroy", id), {
+                onSuccess: () => ElMessage({ message: "Model deleted successfully", type: "success" }),
             });
         })
         .catch(() => {});
 };
 </script>
-
-<style>
-/* Optional Styling for Better UX */
-.el-dialog {
-    border-radius: 12px !important;
-}
-
-</style>
