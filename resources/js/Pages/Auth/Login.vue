@@ -6,15 +6,14 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
-defineProps({
-    canResetPassword: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
-});
+const users = [
+    { name: 'Super Admin', email: 'admin@example.com', role: 'super_admin', password: 'password' },
+    { name: 'Site Manager', email: 'manager@example.com', role: 'manager', password: 'password' },
+    { name: 'Superior Hierarchique', email: 'superior@example.com', role: 'superior_hierarchique', password: 'password' },
+    { name: 'John Doe', email: 'employee@example.com', role: 'employee', password: 'password' },
+];
 
 const form = useForm({
     email: '',
@@ -37,35 +36,31 @@ const submit = () => {
             {{ status }}
         </div>
 
-        <form @submit.prevent="submit">
-            <div>
+        <form @submit.prevent="submit" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mt-4">
                 <InputLabel for="email" value="Email" />
-
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                     v-model="form.email"
                     required
                     autofocus
-                    autocomplete="username"
+                    autocomplete="email"
                 />
-
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
                 <InputLabel for="password" value="Password" />
-
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
                 />
-
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
@@ -90,5 +85,27 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
+
+        <div class="mt-6 bg-white shadow-md rounded px-8 pt-6 pb-8">
+            <h2 class="text-xl font-bold mb-4">Existing Users</h2>
+            <table class="w-full border-collapse border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border border-gray-300 px-4 py-2">Name</th>
+                        <th class="border border-gray-300 px-4 py-2">Email</th>
+                        <th class="border border-gray-300 px-4 py-2">Role</th>
+                        <th class="border border-gray-300 px-4 py-2">Password</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="user in users" :key="user.email" class="text-center">
+                        <td class="border border-gray-300 px-4 py-2">{{ user.name }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ user.email }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ user.role }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ user.password }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </GuestLayout>
 </template>
